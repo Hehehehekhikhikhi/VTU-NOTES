@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTU CSE NOTES</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .upload-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px dashed #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #4CAF50;
+            background: #f0f8f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            background: #f0f8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-display:hover {
+            background: #e8f5e8;
+        }
+
+        .file-input-display i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .subject-header h3 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .notes-list {
+            padding: 20px;
+        }
+
+        .note-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .note-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .note-info {
+            flex: 1;
+        }
+
+        .note-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .note-order {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer-credit {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-graduation-cap"></i> VTU CSE NOTES</h1>
+            <p>Organize your study materials efficiently</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Statistics -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalNotes">0</div>
+                    <div class="stat-label">Total Notes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalSubjects">0</div>
+                    <div class="stat-label">Subjects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalSize">0 MB</div>
+                    <div class="stat-label">Total Size</div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <h2><i class="fas fa-cloud-upload-alt"></i> Add New Note</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="noteName">Note Name:</label>
+                        <input type="text" id="noteName" required placeholder="Enter note name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subjectName">Subject:</label>
+                        <input type="text" id="subjectName" list="subjectsList" required placeholder="Enter or select subject">
+                        <datalist id="subjectsList"></datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sequenceOrder">Sequence Order:</label>
+                        <input type="number" id="sequenceOrder" min="1" required placeholder="Enter sequence number">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload File:</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt,.ppt,.pptx" required>
+                            <div class="file-input-display">
+                                <i class="fas fa-file-upload"></i>
+                                <span>Click to select file (PDF, DOC, DOCX, TXT, PPT, PPTX)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-plus"></i> Add Note
+                    </button>
+                </form>
+            </div>
+
+            <!-- Search Bar -->
+            <input type="text" class="search-bar" id="searchBar" placeholder="🔍 Search notes or subjects...">
+
+            <!-- Notes Display -->
+            <div id="notesContainer">
+                <div class="empty-state">
+                    <i class="fas fa-book-open"></i>
+                    <h3>No notes uploaded yet</h3>
+                    <p>Start by uploading your first note using the form above</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer credit -->
+    <div class="footer-credit">
+        Created by Owais
+    </div>
+
+    <script>
+        // Data storage
+        let notesData = {};
+        let totalSize = 0;
+
+        // DOM elements
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const fileInputDisplay = document.querySelector('.file-input-display span');
+        const notesContainer = document.getElementById('notesContainer');
+        const searchBar = document.getElementById('searchBar');
+        const subjectsDatalist = document.getElementById('subjectsList');
+
+        // Statistics elements
+        const totalNotesEl = document.getElementById('totalNotes');
+        const totalSubjectsEl = document.getElementById('totalSubjects');
+        const totalSizeEl = document.getElementById('totalSize');
+
+        // File input display update
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                fileInputDisplay.textContent = fileName;
+            } else {
+                fileInputDisplay.textContent = 'Click to select file (PDF, DOC, DOCX, TXT, PPT, PPTX)';
+            }
+        });
+
+        // Form submission
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const noteName = document.getElementById('noteName').value.trim();
+            const subjectName = document.getElementById('subjectName').value.trim();
+            const sequenceOrder = parseInt(document.getElementById('sequenceOrder').value);
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+
+            // Validate file size (50MB limit)
+            if (file.size > 50 * 1024 * 1024) {
+                alert('File size too large. Please select a file smaller than 50MB.');
+                return;
+            }
+
+            // Check for duplicate sequence order in the same subject
+            if (notesData[subjectName]) {
+                const existingOrder = notesData[subjectName].some(note => note.order === sequenceOrder);
+                if (existingOrder) {
+                    if (!confirm(`Sequence order ${sequenceOrder} already exists in ${subjectName}. Continue anyway?`)) {
+                        return;
+                    }
+                }
+            }
+
+            // Show loading message
+            showNotification('Uploading file...', 'info');
+
+            // Read file as data URL for storage
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Create note object with file data
+                const note = {
+                    id: Date.now(),
+                    name: noteName,
+                    fileName: file.name,
+                    fileSize: file.size,
+                    fileType: file.type || 'application/octet-stream',
+                    order: sequenceOrder,
+                    uploadDate: new Date().toLocaleDateString(),
+                    fileData: e.target.result // Store file as base64 data URL
+                };
+
+                // Add to data structure
+                if (!notesData[subjectName]) {
+                    notesData[subjectName] = [];
+                }
+                notesData[subjectName].push(note);
+
+                // Sort by sequence order
+                notesData[subjectName].sort((a, b) => a.order - b.order);
+
+                // Update total size
+                totalSize += file.size;
+
+                // Reset form
+                uploadForm.reset();
+                fileInputDisplay.textContent = 'Click to select file (PDF, DOC, DOCX, TXT, PPT, PPTX)';
+
+                // Update display
+                updateSubjectsDatalist();
+                displayNotes();
+                updateStats();
+
+                // Show success message
+                showNotification('Note added successfully!', 'success');
+            };
+
+            reader.onerror = function() {
+                showNotification('Error reading file. Please try again.', 'error');
+            };
+
+            // Read the file
+            reader.readAsDataURL(file);
+        });
+
+        // Update subjects datalist
+        function updateSubjectsDatalist() {
+            const subjects = Object.keys(notesData);
+            subjectsDatalist.innerHTML = subjects.map(subject => 
+                `<option value="${subject}">`
+            ).join('');
+        }
+
+        // Display notes
+        function displayNotes(filterText = '') {
+            if (Object.keys(notesData).length === 0) {
+                notesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No notes uploaded yet</h3>
+                        <p>Start by uploading your first note using the form above</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const filteredData = {};
+            Object.keys(notesData).forEach(subject => {
+                const filteredNotes = notesData[subject].filter(note => 
+                    note.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                    subject.toLowerCase().includes(filterText.toLowerCase())
+                );
+                if (filteredNotes.length > 0) {
+                    filteredData[subject] = filteredNotes;
+                }
+            });
+
+            if (Object.keys(filteredData).length === 0 && filterText) {
+                notesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No notes found</h3>
+                        <p>Try adjusting your search terms</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const subjectsHtml = Object.keys(filteredData).map(subject => `
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <h3><i class="fas fa-folder"></i> ${subject}</h3>
+                        <small>${filteredData[subject].length} notes</small>
+                    </div>
+                    <div class="notes-list">
+                        ${filteredData[subject].map(note => `
+                            <div class="note-item">
+                                <div class="note-info">
+                                    <div class="note-name">
+                                        <i class="fas fa-file-${getFileIcon(note.fileName)}"></i>
+                                        ${note.name}
+                                    </div>
+                                    <div class="note-order">
+                                        Order: ${note.order} | ${formatFileSize(note.fileSize)} | ${note.uploadDate}
+                                    </div>
+                                </div>
+                                <div class="note-actions">
+                                    <button class="btn btn-small" onclick="downloadNote('${subject}', ${note.id})">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn btn-small btn-secondary" onclick="editNote('${subject}', ${note.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-small btn-danger" onclick="deleteNote('${subject}', ${note.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            notesContainer.innerHTML = `<div class="subjects-grid">${subjectsHtml}</div>`;
+        }
+
+        // Get file icon based on extension
+        function getFileIcon(fileName) {
+            const ext = fileName.split('.').pop().toLowerCase();
+            switch(ext) {
+                case 'pdf': return 'pdf';
+                case 'doc':
+                case 'docx': return 'word';
+                case 'ppt':
+                case 'pptx': return 'powerpoint';
+                case 'txt': return 'alt';
+                default: return 'file';
+            }
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalNotes = Object.values(notesData).reduce((su
